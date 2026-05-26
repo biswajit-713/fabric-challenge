@@ -4,7 +4,7 @@ Playwright-based test automation framework covering UI and API scenarios against
 
 ## Prerequisites
 
-- Node.js 20+
+- Node.js 24+
 - npm
 
 ## Setup
