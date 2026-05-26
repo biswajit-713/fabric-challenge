@@ -1,0 +1,15 @@
+{
+  "name": "fabric-qa-challenge",
+  "version": "1.0.0",
+  "description": "Fabric QA Code Challenge - OrangeHRM Test Automation Framework",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --project=ui",
+    "test:api": "playwright test --project=api",
+    "report": "playwright show-report",
+    "email-report": "node utils/emailReport.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0"
+  }
+}

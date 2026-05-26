@@ -1,0 +1,11 @@
+{
+  "admin": {
+    "username": "Admin",
+    "password": "admin123"
+  },
+  "newEmployee": {
+    "firstName": "Test",
+    "lastName": "Employee",
+    "jobTitle": "Software Engineer"
+  }
+}

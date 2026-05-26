@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Playwright output
+playwright-report/
+test-results/
+.playwright-browsers/
+
+# Playwright cache (local browser installs)
+/ms-playwright/
+
+# Shared state written by UI project for API project
+shared/state.json
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
