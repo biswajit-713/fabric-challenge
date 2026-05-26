@@ -9,8 +9,9 @@ test.describe('Employee lifecycle - PIM module', () => {
         await page.getByRole('textbox', { name: 'Username' }).fill(admin.username);
         await page.getByRole('textbox', { name: 'Password' }).fill(admin.password);
         await page.getByRole('button', { name: 'Login' }).click();
+        await page.waitForURL('**/dashboard/index');
 
-        await page.getByRole('banner').getByRole('img', { name: 'profile picture' }).click();
+        await page.locator('.oxd-userdropdown-tab').click();
         await page.getByRole('menuitem', { name: 'Logout' }).click();
     });
 });
