@@ -20,21 +20,12 @@ npx playwright install chromium
 |---|---|
 | `npm test` | Run all tests (UI then API) |
 | `npm run test:ui` | Run UI tests only |
-| `npm run test:api` | Run API tests only (depends on UI project) |
-
-## Reports
-
-```bash
-npm run report        # Open the HTML report in a browser
-```
-
-The JSON results are written to `test-results/results.json` and the HTML report to `playwright-report/`.
+| `npm run test:api` | Run API tests (depends on UI project) |
 
 ## Configuration
 
 - Base URL: `https://opensource-demo.orangehrmlive.com`
-- Test credentials and employee data: `data/employee.json`
-- Screenshots captured on failure; video and trace captured on first retry
+- Test credentials and employee data: `data/testdata.json`
 
 ## CI
 
