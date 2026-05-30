@@ -4,54 +4,43 @@ import { DashboardPage } from "../../pages/dashboard.page";
 import { PimModule } from "../../modules/pim.module";
 import { admin } from "../../data/testdata.json";
 
-// Manually-created contexts don't inherit baseURL from playwright.config.js
 const BASE_URL = "https://opensource-demo.orangehrmlive.com";
 
 test.describe.serial("Employee lifecycle Create and update - PIM module", () => {
-  let authState;
+  let sharedPage;
+  let sharedContext;
 
   test.beforeAll(async ({ browser }) => {
-    const context = await browser.newContext({ baseURL: BASE_URL });
-    const page = await context.newPage();
-    const loginPage = new LoginPage(page);
-    await loginPage.goto();
-    await loginPage.login(admin.username, admin.password);
-    authState = await context.storageState();
-    await context.close();
+    sharedContext = await browser.newContext({ baseURL: BASE_URL });
+    sharedPage = await sharedContext.newPage();
+    await new LoginPage(sharedPage).goto();
+    await new LoginPage(sharedPage).login(admin.username, admin.password);
   });
 
-  test.afterAll(async ({ browser }) => {
-    const context = await browser.newContext({ baseURL: BASE_URL, storageState: authState });
-    const page = await context.newPage();
-    await page.goto("/web/index.php/dashboard/index");
-    await new DashboardPage(page).logout();
-    await new LoginPage(page).assertOnPage();
-    await context.close();
+  test.afterAll(async () => {
+    await new DashboardPage(sharedPage).logout();
+    await new LoginPage(sharedPage).assertOnPage();
+    await sharedContext.close();
   });
 
-  test.beforeEach(async ({ page }) => {
-    await page.context().addCookies(authState.cookies ?? []);
-    await page.goto("/web/index.php/dashboard/index");
+  test.beforeEach(async () => {
+    await sharedPage.goto("/web/index.php/dashboard/index");
   });
 
-  test("should show a functional left navigation menu", async ({ page }) => {
-    await new DashboardPage(page).assertLeftNavigation();
+  test("should show a functional left navigation menu", async () => {
+    await new DashboardPage(sharedPage).assertLeftNavigation();
   });
 
-  test("should create a new employee", async ({ page, newEmployee }) => {
-    const dashboardPage = new DashboardPage(page);
-    await dashboardPage.navigateTo("PIM");
-
-    const pim = new PimModule(page);
+  test("should create a new employee", async ({ newEmployee }) => {
+    await new DashboardPage(sharedPage).navigateTo("PIM");
+    const pim = new PimModule(sharedPage);
     await pim.addEmployee(newEmployee);
     await pim.assertEmployeeCreated(newEmployee);
   });
 
-  test("should update employee information", async ({ page, newEmployee }) => {
-    const dashboardPage = new DashboardPage(page);
-    await dashboardPage.navigateTo("PIM");
-
-    const pim = new PimModule(page);
+  test("should update employee information", async ({ newEmployee }) => {
+    await new DashboardPage(sharedPage).navigateTo("PIM");
+    const pim = new PimModule(sharedPage);
     await pim.updateEmployeeInfo(newEmployee);
     await pim.assertEmployeeUpdated(newEmployee);
   });
