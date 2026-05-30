@@ -1,6 +1,7 @@
 const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
+  globalSetup: './global-setup.js',
   testDir: './tests',
   fullyParallel: false,
   timeout: 60000,

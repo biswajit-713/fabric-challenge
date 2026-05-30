@@ -11,6 +11,7 @@ test-results/
 
 # Shared state written by UI project for API project
 shared/state.json
+.run-state.json
 
 # Environment variables
 .env
