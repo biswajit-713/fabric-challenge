@@ -5,6 +5,10 @@ export class LeftNavigationMenu {
         this.page = page;
     }
 
+    async launchModule(hcmModule) {
+        await this.page.getByRole('link', { name: hcmModule }).click();
+    }
+
     async assertIsFunctional() {
         await expect(this.page.getByRole('navigation', {name: 'Sidepanel'})).toBeVisible();
 
@@ -14,10 +18,9 @@ export class LeftNavigationMenu {
         await searchBox.fill('PIM');
 
         const nav = this.page.getByRole('navigation', { name: 'Sidepanel' });
+        await expect(nav.locator('li')).toHaveCount(1);
         await expect(nav.getByRole('link', { name: 'PIM' })).toBeVisible();
-        await expect(nav.getByRole('link', { name: 'Admin' })).not.toBeVisible();
-        await expect(nav.getByRole('link', { name: 'Leave' })).not.toBeVisible();
-
+        
         await searchBox.clear();
     }
 }

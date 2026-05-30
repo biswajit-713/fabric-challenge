@@ -1,3 +1,5 @@
+import { expect } from '@playwright/test';
+
 export class LoginPage {
     constructor(page) {
         this.page = page;
@@ -15,5 +17,10 @@ export class LoginPage {
         await this.passwordInput.fill(password);
         await this.loginButton.click();
         await this.page.waitForURL('**/dashboard/index');
+    }
+
+    async assertOnPage() {
+        await expect(this.page).toHaveURL(/login/);
+        await expect(this.usernameInput).toBeVisible();
     }
 }

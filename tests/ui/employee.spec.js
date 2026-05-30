@@ -1,35 +1,45 @@
-import { test, expect } from '@playwright/test';
-import { LoginPage } from '../../pages/login.page';
+import { test } from "../fixtures";
+import { LoginPage } from "../../pages/login.page";
+import { admin } from "../../data/testdata.json";
+import { DashboardPage } from "../../pages/dashboard.page";
+import { PimModule } from "../../modules/pim.module";
 
-import { admin } from '../../data/employee.json';
-import { DashboardPage } from '../../pages/dashboard.page';
-import { PersonalInformationManagement } from '../../modules/pim.module';
+test.describe.serial("Employee lifecycle Create and update - PIM module", () => {
+  let loginPage;
+  let dashboardPage;
 
-test.describe('Employee lifecycle - PIM module', () => {
-    test('should create a new employee and update its infomation', async ( { page }) => {
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    dashboardPage = new DashboardPage(page);
+    await loginPage.goto();
+    await loginPage.login(admin.username, admin.password);
 
-        const loginPage = new LoginPage(page);
-        const dashboardPage = new DashboardPage(page);
-        const pim = new PersonalInformationManagement(page);
-        
-        // login
-        await loginPage.goto();
-        await loginPage.login(admin.username, admin.password);
+  });
 
-        // assert left menu is functional
-        await dashboardPage.assertLeftNavigationFunctional();
+  test.afterEach(async () => {
+    await dashboardPage.logout();
+    await loginPage.assertOnPage();
+  });
 
-        // navigate to PIM module
-        await page.getByRole('link', { name: 'PIM' }).click();
+  test("should show a functional left navigation menu", async () => {
+    await dashboardPage.assertLeftNavigation();
+  });
 
-        // add employee
-        const employee = {'firstName': 'dimple', lastName: 'chin'};
-        const employeeId = await pim.addEmployee(employee);
-        await pim.assertNewEmployee({...employee, id: employeeId});
+  test("should create a new employee", async ({ page, newEmployee }) => {
+    await dashboardPage.navigateTo("PIM");
+    
+    const pim = new PimModule(page);
+    await pim.addEmployee(newEmployee);
+    
+    await pim.assertEmployeeCreated(newEmployee);
+  });
 
-        // logout
-        await dashboardPage.logout();
-        await expect(loginPage.page).toHaveURL(/login/);
-        await expect(loginPage.usernameInput).toBeVisible();
-    });
+  test("should update employee information", async ({ page, newEmployee }) => {
+    await dashboardPage.navigateTo("PIM");
+
+    const pim = new PimModule(page);
+    await pim.updateEmployeeInfo(newEmployee);
+
+    await pim.assertEmployeeUpdated(newEmployee);
+  });
 });
