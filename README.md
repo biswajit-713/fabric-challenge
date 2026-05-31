@@ -68,5 +68,8 @@ The PIM module is a logical abstraction of People Information Management that in
 #### 5. api authentication through Bearer Token
 The bearer token to execute api tests was found online through search and a fixed value is used for testing. In real applications, those would be fetched by first providing authentication through credentials such as client id/ client secret.
 
+#### 6. ui tests running in serial
+The ui test spec is marked to run in serial mode because the 3rd test of updating employee information is dependent on the 2nd test to create a new employee. While the 1st test is independent, it just runs in sequence by virtue of being in the same test spec. In ideal test repository, the update employee test should have its own create employee component through an api set up.
+
 # Disclaimer
 Both the code challenge and case study have been prepared with AI assitance to explore various approaches and discovering all facets of a choice. The AI assistance was introduced only after initial framing of the solution statement. I own 100% of the choices adopted in both the problem statements.
